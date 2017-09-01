@@ -96,8 +96,8 @@ public class BuildTask extends GolangTaskSupport {
             .env("CGO_ENABLED", TRUE.equals(toolchain.getCgoEnabled()) ? "1" : "0");
 
         executor.arguments("build");
+	    executor.arguments(build.getResolvedArguments());
         executor.arguments("-o", outputFilename);
-        executor.arguments(build.getResolvedArguments());
         executor.argument(targetPackage.getGroup());
 
         executor.execute(EXCEPTION_PRODUCER);

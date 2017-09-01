@@ -1,7 +1,6 @@
 package org.echocat.gradle.plugins.golang.model;
 
 import org.gradle.api.Project;
-import org.gradle.internal.impldep.com.google.common.collect.Iterators;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -230,28 +229,12 @@ public class BuildSettings {
     public List<String> getResolvedArguments() {
         final List<String> result = new ArrayList<>();
         final String[] arguments = getArguments();
-        final StringBuilder ldFlagsValue = new StringBuilder();
         if (arguments != null) {
-            final Iterator<String> i = Iterators.forArray(arguments);
+            final Iterator<String> i = Arrays.asList(arguments).iterator();
             while (i.hasNext()) {
                 final String argument = i.next();
-                if ("-ldflags".equals(argument)) {
-                    if (i.hasNext()) {
-                        ldFlagsValue.append(i.next());
-                    }
-                } else {
-                    result.add(argument);
-                }
+	            result.add(argument);
             }
-        }
-        final String definitionsEscaped = getDefinitionsEscaped();
-        if (ldFlagsValue.length() > 0 && !definitionsEscaped.isEmpty()) {
-            ldFlagsValue.append(' ');
-        }
-        ldFlagsValue.append(definitionsEscaped);
-        if (ldFlagsValue.length() > 0) {
-            result.add("-ldflags");
-            result.add(ldFlagsValue.toString());
         }
         return result;
     }
